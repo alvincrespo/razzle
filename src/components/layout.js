@@ -7,25 +7,36 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+// import { useStaticQuery, graphql } from "gatsby"
+import { Global } from "@emotion/core"
+import styled from "@emotion/styled"
 
-import Header from "./header"
-import "./layout.css"
+import { globalStyles } from "./globalStyles"
+
+const Footer = styled.footer`
+  text-align: center;
+  font-size: 0.8rem;
+  color: yellow;
+
+  a {
+    color: yellow;
+  }
+`
 
 const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
+  // const data = useStaticQuery(graphql`
+  //   query SiteTitleQuery {
+  //     site {
+  //       siteMetadata {
+  //         title
+  //       }
+  //     }
+  //   }
+  // `)
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata.title} />
+      <Global styles={globalStyles} />
       <div
         style={{
           margin: `0 auto`,
@@ -35,11 +46,12 @@ const Layout = ({ children }) => {
         }}
       >
         <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}, Built with
+        <Footer>
+          © {new Date().getFullYear()}, Built by
           {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
+          <a href="https://www.gatsbyjs.org">@alvincrespo</a> using{" "}
+          <a href="https://www.gatsbyjs.org">GatsbyJS</a>
+        </Footer>
       </div>
     </>
   )

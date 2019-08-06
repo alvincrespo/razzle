@@ -1,10 +1,15 @@
+const config = { path: `.env.${process.env.NODE_ENV}` }
+
+require("dotenv").config(config)
+
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Razzle - Start your apps right.`,
+    description: `Start your next app correctly.`,
+    author: `@alvincrespo`,
   },
   plugins: [
+    `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -25,6 +30,14 @@ module.exports = {
         theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+      },
+    },
+    {
+      resolve: "gatsby-source-pg",
+      options: {
+        connectionString: `postgres://${process.env.PG_USER}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DATA}`,
+        schema: "public",
+        refetchInterval: 60, // Refetch data every 60 seconds
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
