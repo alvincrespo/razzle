@@ -1,10 +1,30 @@
 import React from "react"
+import { connect } from "react-redux"
 import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 import styled from "@emotion/styled"
+
+const Counter = ({ counter, increment }) => (
+  <div>
+    <p>Count: {counter.count}</p>
+    <button onClick={increment}>Increment</button>
+  </div>
+)
+const mapStateToProps = ({ counter }) => {
+  return { counter }
+}
+
+const mapDispatchToProps = dispatch => {
+  return { increment: () => dispatch({ type: `INCREMENT` }) }
+}
+
+const ConnectedCounter = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Counter)
 
 const H1 = styled.h1`
   font-size: 10rem;
@@ -32,6 +52,7 @@ const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
     <H1>Razzle</H1>
+    <ConnectedCounter />
     <ul>
       {data.postgres.allSkills.nodes.slice(0, 3).map(skill => (
         <li key={skill.id}>
