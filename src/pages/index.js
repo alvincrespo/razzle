@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import { connect } from "react-redux"
+import uuid from "react-uuid"
 import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
@@ -7,24 +8,38 @@ import SEO from "../components/seo"
 
 import styled from "@emotion/styled"
 
-const Counter = ({ counter, increment }) => (
-  <div>
-    <p>Count: {counter.count}</p>
-    <button onClick={increment}>Increment</button>
-  </div>
-)
-const mapStateToProps = ({ counter }) => {
-  return { counter }
+const SkillForm = ({ addSkill }) => {
+  const [skill, setSkill] = useState()
+
+  const onSetSkill = evt => {
+    setSkill(evt.target.value)
+  }
+
+  const onAddSkill = () => {
+    addSkill(skill)
+  }
+
+  return (
+    <div>
+      <p>
+        Skill: <input type="text" onChange={onSetSkill} />
+      </p>
+      <button onClick={onAddSkill}>Add Skill</button>
+    </div>
+  )
+}
+const mapStateToProps = ({ skills }) => {
+  return { skills }
 }
 
 const mapDispatchToProps = dispatch => {
-  return { increment: () => dispatch({ type: `INCREMENT` }) }
+  return { addSkill: skill => dispatch({ type: `ADD_SKILL`, skill }) }
 }
 
-const ConnectedCounter = connect(
-  mapStateToProps,
+const ConnectedSkillForm = connect(
+  null,
   mapDispatchToProps
-)(Counter)
+)(SkillForm)
 
 const H1 = styled.h1`
   font-size: 10rem;
@@ -48,19 +63,26 @@ export const query = graphql`
   }
 `
 
-const IndexPage = ({ data }) => (
+const IndexPage = ({ data, skills }) => (
   <Layout>
     <SEO title="Home" />
     <H1>Razzle</H1>
-    <ConnectedCounter />
     <ul>
       {data.postgres.allSkills.nodes.slice(0, 3).map(skill => (
         <li key={skill.id}>
           <strong>{skill.name}</strong>
         </li>
       ))}
+      {skills.map(s => (
+        <li key={uuid()}>
+          <strong>{s}</strong>
+        </li>
+      ))}
     </ul>
+    <ConnectedSkillForm />
   </Layout>
 )
 
-export default IndexPage
+const ConnectedIndexPage = connect(mapStateToProps)(IndexPage)
+
+export default ConnectedIndexPage

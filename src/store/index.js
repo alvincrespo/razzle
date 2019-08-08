@@ -2,16 +2,16 @@ import { createStore as reduxCreateStore } from "redux"
 import { initialState } from "./initialState"
 import { combineReducers } from "redux"
 
-const counter = (state = {}, action) => {
+const skills = (state = [], action) => {
   switch (action.type) {
-    case "INCREMENT":
-      return { count: state.count + 1 }
+    case "ADD_SKILL":
+      return [...state, action.skill]
     default:
       return state
   }
 }
 
-const reducer = combineReducers({ counter })
+const reducer = combineReducers({ skills })
 
 const createStore = () => reduxCreateStore(reducer, initialState)
 
